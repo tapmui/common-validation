@@ -1,4 +1,4 @@
-﻿namespace Nationaldentifier
+﻿namespace Collector.Common.Validation.NationalIdentifier
 {
     public enum NationalIdentifierCountry
     {

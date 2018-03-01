@@ -32,7 +32,9 @@ namespace Collector.Common.Validation.AccountNumber
                 throw new ArgumentException("Clearing number must contain digits", "clearingNumber");
             }
 
-            var config = _banks.FirstOrDefault(c => Regex.IsMatch(clearingNumber2, c.ClearingRegex));
+            var config = _banks
+                .Where(c => c.Clearing <= clearingNumber2.Length)
+                .FirstOrDefault(c => Regex.IsMatch(clearingNumber2.Substring(0, c.Clearing), c.ClearingRegex));
             if (config == null)
             {
                 throw new ArgumentException("Cannot identify clearing number");
@@ -60,10 +62,12 @@ namespace Collector.Common.Validation.AccountNumber
             var accountNumber2 = Regex.Replace(accountNumber, NO_DIGITS_PATTERN, string.Empty);
             
             // Look up validation config based on account number Regex pattern
-            var config = _banks.FirstOrDefault(c => Regex.IsMatch(clearingNumber2, c.ClearingRegex));
+            var config = _banks
+                .Where(c => c.Clearing <= clearingNumber2.Length)
+                .FirstOrDefault(c => Regex.IsMatch(clearingNumber2.Substring(0, c.Clearing), c.ClearingRegex));
             if (config == null)
             {
-                throw new ArgumentException("Could not match number to a bank");
+                throw new ArgumentException("Could not match clearing number to a bank");
             }
 
             // Ensure account number contains specified number of digits

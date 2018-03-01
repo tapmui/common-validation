@@ -30,31 +30,50 @@ namespace Collector.Common.Validation.Tests.AccountNumber
         }
 
         [Theory]
-        [TestCase("9561-4938193", "9561", "Avanza Bank")]
-        [TestCase("9046-4938193", "9046", "Citibank")]
-        [TestCase("9188-4938193", "9188", "Danske Bank")]
-        [TestCase("6123-4938193", "6123", "Handelsbanken")]
-        [TestCase("1119-4938193", "1119", "Nordea")]
-        [TestCase("2030-4938193", "2030", "Nordea")]
-        [TestCase("3311-4938193", "3311", "Nordea")]
-        [TestCase("4123-4938193", "4123", "Nordea")]
-        [TestCase("5482-4938193", "5482", "SEB")]
-        [TestCase("9137-4938193", "9137", "SEB")]
-        public void Identify_Bank_By_ClearingNumber(string clearingNumber, string expectedClearingNumber, string expectedBankName)
+        [TestCase("9561", "Avanza Bank")]
+        [TestCase("9046", "Citibank")]
+        [TestCase("9188", "Danske Bank")]
+        [TestCase("6123", "Handelsbanken")]
+        [TestCase("1119", "Nordea")]
+        [TestCase("2030", "Nordea")]
+        [TestCase("3311", "Nordea")]
+        [TestCase("4123", "Nordea")]
+        [TestCase("5482", "SEB")]
+        [TestCase("9137", "SEB")]
+        [TestCase("8123", "Swedbank")]
+        [TestCase("8123-5", "Swedbank")]
+        public void Identify_Bank_By_ClearingNumber(string clearingNumber, string expectedBankName)
         {
             try
             {
                 var result = _sut.Identify(clearingNumber).Result;
 
-                Assert.That(result.Clearing, Is.EqualTo(expectedClearingNumber));
                 Assert.That(result.Name, Is.EqualTo(expectedBankName));
             }
             catch (ArgumentException ex)
             {
-                Assert.Fail("Validation failed for clearing number {0}: {2}", clearingNumber, ex.Message);
+                Assert.Fail("Identification failed for clearing number {0}: {1}", clearingNumber, ex.Message);
             }
         }
 
+        [Theory]
+        [TestCase("8123", "1234567", "Swedbank")]
+        [TestCase("8123-5", "7654321", "Swedbank")]
+        public void Validate_AccountNumber_And_Expect_To_Identify_BankName(string clearingNumber, string accountNumber, string expectedBankName)
+        {
+            try
+            {
+                var result = _sut.Validate(clearingNumber, accountNumber).Result;
+
+                Assert.That(result.Valid, Is.False);
+                Assert.That(result.Name, Is.EqualTo(expectedBankName));
+            }
+            catch (ArgumentException ex)
+            {
+                Assert.Fail("Validation failed for number {0} {1}: {2}", clearingNumber, accountNumber, ex.Message);
+            }
+        }
+        
         [Theory]
         public void Validate_AccountNumbers_From_CSV_File()
         {

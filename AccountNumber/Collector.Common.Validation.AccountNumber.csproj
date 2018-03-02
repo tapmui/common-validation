@@ -2,7 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Authors>Collector AB</Authors>
+    <Company>Collector AB</Company>
+    <Description>Perform bank account number validation and bank identification (by clearing number). Based on kontonummer.js by Jonas Persson (https://jop.io/).</Description>
+    <PackageTags>validation account number bank identification</PackageTags>
+    <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="banks.se.json" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="banks.se.json">

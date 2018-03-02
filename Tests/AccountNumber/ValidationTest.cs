@@ -8,12 +8,12 @@ namespace Collector.Common.Validation.Tests.AccountNumber
 {
     public class ValidationTest
     {
-        private Validator _sut;
+        private IAccountNumberValidator _sut;
 
         [SetUp]
         public void SetUp()
         {
-            _sut = new Validator(AppDomain.CurrentDomain.BaseDirectory + "banks.json");
+            _sut = new AccountNumberValidator(AppDomain.CurrentDomain.BaseDirectory + "banks.json");
         }
 
         [Theory]

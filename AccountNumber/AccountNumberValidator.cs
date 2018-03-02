@@ -8,13 +8,13 @@ using Collector.Common.Validation.AccountNumber.Models;
 
 namespace Collector.Common.Validation.AccountNumber
 {
-    public class Validator
+    public class AccountNumberValidator : IAccountNumberValidator
     {
         private const string NO_DIGITS_PATTERN = @"[^\d]";
 
         private readonly AccountValidationModel[] _banks;
 
-        public Validator(string path)
+        public AccountNumberValidator(string path)
         {
             _banks = JsonConvert.DeserializeObject<AccountValidationModel[]>(File.ReadAllText(path));
         }

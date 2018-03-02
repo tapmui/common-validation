@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>collector.common.validation.accountnumber</id>
+		<version>1.0</version>
+		<title>Collector.Common.Validation.AccountNumber</title>
+		<authors>Magnus Törnvall</authors>
+		<owners>Collector Bank AB</owners>
+		<licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>Performs bank account number validation and bank identification (by clearing number). Original author: Jonas Persson (https://jop.io/).</description>
+		<releaseNotes>Initial release</releaseNotes>
+		<copyright>Copyright 2018</copyright>
+		<tags>validation account number bank identification</tags>
+	</metadata>
+	<files>
+		<file src="banks.se.json" target="" />
+	</files>
+</package>

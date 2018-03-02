@@ -1,8 +1,11 @@
 ﻿using Collector.Common.Validation.AccountNumber;
+using Collector.Common.Validation.AccountNumber.Models;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Collector.Common.Validation.Tests.AccountNumber
 {
@@ -10,23 +13,10 @@ namespace Collector.Common.Validation.Tests.AccountNumber
     {
         private Validator _sut;
 
-        private string[] _csvColumns;
-        private string[] _csvRows;
-
         [SetUp]
         public void SetUp()
         {
             _sut = new Validator(AppDomain.CurrentDomain.BaseDirectory + "banks.json");
-
-            var csvLines = File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "accounts-numbers.csv"));
-            if (csvLines.Length != 0)
-            {
-                _csvColumns = csvLines[0].Split(new char[] { ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
-                if (csvLines.Length > 1)
-                {
-                    _csvRows = csvLines.Skip(1).ToArray();
-                }
-            }
         }
 
         [Theory]
@@ -44,63 +34,43 @@ namespace Collector.Common.Validation.Tests.AccountNumber
         [TestCase("8123-5", "Swedbank")]
         public void Identify_Bank_By_ClearingNumber(string clearingNumber, string expectedBankName)
         {
-            try
-            {
-                var result = _sut.Identify(clearingNumber).Result;
+            var result = _sut.Identify(clearingNumber).Result;
 
-                Assert.That(result.Name, Is.EqualTo(expectedBankName));
-            }
-            catch (ArgumentException ex)
-            {
-                Assert.Fail("Identification failed for clearing number {0}: {1}", clearingNumber, ex.Message);
-            }
+            Assert.That(result.Name, Is.EqualTo(expectedBankName));
         }
 
         [Theory]
         [TestCase("8123", "1234567", "Swedbank")]
         [TestCase("8123-5", "7654321", "Swedbank")]
-        public void Validate_AccountNumber_And_Expect_To_Identify_BankName(string clearingNumber, string accountNumber, string expectedBankName)
+        public void Validate_AccountNumber_And_Expect_Exception(string clearingNumber, string accountNumber, string expectedBankName)
         {
-            try
-            {
-                var result = _sut.Validate(clearingNumber, accountNumber).Result;
-
-                Assert.That(result.Valid, Is.False);
-                Assert.That(result.Name, Is.EqualTo(expectedBankName));
-            }
-            catch (ArgumentException ex)
-            {
-                Assert.Fail("Validation failed for number {0} {1}: {2}", clearingNumber, accountNumber, ex.Message);
-            }
+            Assert.ThrowsAsync<ArgumentException>(() => _sut.Validate(clearingNumber, accountNumber));
         }
-        
+
         [Theory]
-        public void Validate_AccountNumbers_From_CSV_File()
+        [TestCase("1110", "0000100", "Nordea")]
+        [TestCase("3300", "0009100", "Nordea")]
+        public void Validate_AccountNumber_and_Expect_BankName(string clearingNumber, string accountNumber, string expectedBankName)
         {
-            if (_csvRows == null || _csvRows.Length == 0)
+            var result = _sut.Validate(clearingNumber, accountNumber).Result;
+
+            Assert.That(result.Name, Is.EqualTo(expectedBankName));
+        }
+
+        [Theory]
+        [Explicit]
+        [TestCaseSource("GetNumbers")]
+        public void Validate_AccountNumbers_From_Source_Where_Bank_Is_Recognised(string number)
+        {
+            Assert.DoesNotThrowAsync(() => _sut.Validate(number));
+        }
+
+        private static IEnumerable<object> GetNumbers()
+        {
+            var allRows = File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "numbers.csv"));
+            foreach (var line in allRows)
             {
-                return;
-            }
-
-            foreach (string row in _csvRows)
-            {
-                var values = row.Split(new char[] { ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
-                if (values.Length >= 2)
-                {
-                    var clearingNumber = values[0];
-                    var accountNumber = values[1];
-
-                    try
-                    {
-                        var result = _sut.Validate(clearingNumber, accountNumber).Result;
-
-                        Assert.That(result.Valid, Is.True);
-                    }
-                    catch (ArgumentException ex)
-                    {
-                        Assert.Fail("Validation failed for {0} {1}: {2}", clearingNumber, accountNumber, ex.Message);
-                    }
-                }
+                yield return new object[] { line };
             }
         }
     }

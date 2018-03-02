@@ -7,12 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="accounts-numbers.csv" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="..\AccountNumber\banks.json" Link="banks.json" />
-    <Content Include="accounts-numbers.csv">
+    <Content Include="numbers.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

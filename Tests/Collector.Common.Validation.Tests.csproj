@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="..\AccountNumber\banks.json" Link="banks.json" />
     <Content Include="numbers.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

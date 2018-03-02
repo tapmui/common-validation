@@ -5,11 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="banks.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="banks.json">
+    <Content Include="banks.se.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

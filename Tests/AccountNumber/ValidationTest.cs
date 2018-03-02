@@ -13,7 +13,7 @@ namespace Collector.Common.Validation.Tests.AccountNumber
         [SetUp]
         public void SetUp()
         {
-            _sut = new AccountNumberValidator(AppDomain.CurrentDomain.BaseDirectory + "banks.json");
+            _sut = new AccountNumberValidator(AppDomain.CurrentDomain.BaseDirectory + "banks.se.json");
         }
 
         [Theory]

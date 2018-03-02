@@ -32,17 +32,18 @@ namespace Collector.Common.Validation.AccountNumber
                 throw new ArgumentException("Clearing number must contain digits", "clearingNumber");
             }
 
-            var config = _banks
-                .Where(c => c.Clearing <= clearingNumber2.Length)
-                .FirstOrDefault(c => Regex.IsMatch(clearingNumber2.Substring(0, c.Clearing), c.ClearingRegex));
-            if (config == null)
+            try
             {
-                throw new ArgumentException("Cannot identify clearing number");
-            }
+                var config = _banks.Single(c => Regex.IsMatch(clearingNumber2, c.ClearingRegex));
 
-            return Task.FromResult(
-                new BankIdentityModel(clearingNumber2.Substring(0, config.Clearing) , config.Name)
-            );
+                return Task.FromResult(
+                    new BankIdentityModel(clearingNumber2.Substring(0, config.Clearing), config.Name)
+                );
+            }
+            catch (InvalidOperationException)
+            {
+                throw new ArgumentException("Clearing number could not be identified", "clearingNumber");
+            }
         }
 
         public Task<BankAccountModel> Validate(string clearingNumber, string accountNumber)

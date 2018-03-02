@@ -1,11 +1,8 @@
 ﻿using Collector.Common.Validation.AccountNumber;
-using Collector.Common.Validation.AccountNumber.Models;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace Collector.Common.Validation.Tests.AccountNumber
 {

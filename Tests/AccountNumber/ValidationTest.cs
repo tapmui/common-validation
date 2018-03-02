@@ -29,6 +29,9 @@ namespace Collector.Common.Validation.Tests.AccountNumber
         [TestCase("9137", "SEB")]
         [TestCase("8123", "Swedbank")]
         [TestCase("8123-5", "Swedbank")]
+        [TestCase("3407", "Länsförsäkringar Bank")]
+        [TestCase("9631", "Lån och Spar Bank Sverige")]
+        [TestCase("2300", "Ålandsbanken")]
         public void Identify_Bank_By_ClearingNumber(string clearingNumber, string expectedBankName)
         {
             var result = _sut.Identify(clearingNumber).Result;

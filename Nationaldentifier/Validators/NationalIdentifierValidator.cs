@@ -48,7 +48,7 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
             return false;
         }
 
-        public static bool IsValidInAnyCountry(int nationalIdentifier)
+        public static bool IsValidInAnyCountry(long nationalIdentifier)
         {
             var nationalIdentifierString = nationalIdentifier.ToString();
             return IsValidInAnyCountry(nationalIdentifierString);
@@ -66,26 +66,14 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
             throw new ArgumentException("National Identifier is not valid");
         }
 
-        public static int NormalizeForAnyCountry(int nationalIdentifier)
-        {
-            var nationalIdentifierString = nationalIdentifier.ToString();
-            return Convert.ToInt32((string) NormalizeForAnyCountry(nationalIdentifierString));
-        }
-
         public abstract bool IsValid(string nationalIdentifier);
 
-        public bool IsValid(int nationalIdentifier)
+        public bool IsValid(long nationalIdentifier)
         {
             return IsValid(nationalIdentifier.ToString());
         }
 
         public abstract string Normalize(string nationalIdentifier);
-
-        public int Normalize(int nationalIdentifier)
-        {
-            var result = Normalize(nationalIdentifier.ToString());
-            return Convert.ToInt32((string) result);
-        }
 
         internal static bool IsValidDate(int year, int month, int day)
         {

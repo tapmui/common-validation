@@ -36,6 +36,15 @@ namespace Collector.Common.Validation.Test.NationalIdentifier
             Assert.That(actual, Is.True);
         }
 
+        [TestCase(31129956715)]
+        [TestCase(29023220197)]
+        public void IsValid_NationalIdentifierAsInt_ReturnTrue(long nationalIdentifier)
+        {
+            var actual = _sut.IsValid(nationalIdentifier);
+
+            Assert.That(actual, Is.True);
+        }
+
 
         [TestCase(null)]
         [TestCase("xx")] // Invalid
@@ -62,6 +71,15 @@ namespace Collector.Common.Validation.Test.NationalIdentifier
         [TestCase("010170-89966")]    // Invalid serial number   010170-899 CC   - control digits should be valid
         [TestCase("010199-89980")]    // Invalid serial number   010199-899 CC   - control digits should be valid
         public void IsValid_NationalIdentifierIsInvalid_ReturnFalse(string nationalIdentifier)
+        {
+            var actual = _sut.IsValid(nationalIdentifier);
+
+            Assert.That(actual, Is.False);
+        }
+
+        [TestCase(19133320094)]
+        [TestCase(89013320072)] 
+        public void IsValid_NationalIdentifierAsInt_ReturnFalse(long nationalIdentifier)
         {
             var actual = _sut.IsValid(nationalIdentifier);
 

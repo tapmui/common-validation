@@ -41,6 +41,17 @@ namespace Collector.Common.Validation.Test.NationalIdentifier
             Assert.That(actual, Is.True);
         }
 
+        [TestCase(196401018780)]
+        [TestCase(198005202216)]
+        public void IsValid_NationalIdentifierAsInt_ReturnTrue(long nationalIdentifier)
+        {
+            SystemTime.TestTime = _defaultTestTime;
+
+            var actual = _sut.IsValid(nationalIdentifier);
+
+            Assert.That(actual, Is.True);
+        }
+
 
         [TestCase(null)]
         [TestCase("xx")] // Invalid
@@ -53,6 +64,17 @@ namespace Collector.Common.Validation.Test.NationalIdentifier
         [TestCase("050229-5009")] // 2005 does not have leapyear
         [TestCase("581023-9574")] // Control number not correct
         public void IsValid_NationalIdentifierIsInvalid_ReturnFalse(string nationalIdentifier)
+        {
+            SystemTime.TestTime = _defaultTestTime;
+
+            var actual = _sut.IsValid(nationalIdentifier);
+
+            Assert.That(actual, Is.False);
+        }
+
+        [TestCase(3313192092)]
+        [TestCase(3301492074)]
+        public void IsValid_NationalIdentifierAsInt_ReturnFalse(long nationalIdentifier)
         {
             SystemTime.TestTime = _defaultTestTime;
 

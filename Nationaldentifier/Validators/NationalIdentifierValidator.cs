@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Collector.Common.Validation.NationalIdentifier.Interface;
 
-namespace Collector.Common.Validation.NationalIdentifier
+namespace Collector.Common.Validation.NationalIdentifier.Validators
 {
     public abstract class NationalIdentifierValidator : INationalIdentifierValidator
     {
@@ -65,16 +66,26 @@ namespace Collector.Common.Validation.NationalIdentifier
             throw new ArgumentException("National Identifier is not valid");
         }
 
-        public static string NormalizeForAnyCountry(int nationalIdentifier)
+        public static int NormalizeForAnyCountry(int nationalIdentifier)
         {
             var nationalIdentifierString = nationalIdentifier.ToString();
-            return NormalizeForAnyCountry(nationalIdentifierString);
+            return Convert.ToInt32((string) NormalizeForAnyCountry(nationalIdentifierString));
         }
 
         public abstract bool IsValid(string nationalIdentifier);
-        public abstract bool IsValid(int nationalIdentifier);
+
+        public bool IsValid(int nationalIdentifier)
+        {
+            return IsValid(nationalIdentifier.ToString());
+        }
+
         public abstract string Normalize(string nationalIdentifier);
-        public abstract string Normalize(int nationalIdentifier);
+
+        public int Normalize(int nationalIdentifier)
+        {
+            var result = Normalize(nationalIdentifier.ToString());
+            return Convert.ToInt32((string) result);
+        }
 
         internal static bool IsValidDate(int year, int month, int day)
         {

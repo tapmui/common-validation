@@ -62,7 +62,7 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
         {
             if (!IsValid(nationalIdentifier))
                 throw new ArgumentException(
-                    ErrorMessages.GetInvalidIdentifierMessage(NationalCountry),
+                    ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier, NationalCountry),
                     nameof(nationalIdentifier));
 
             var hasPlusSign = nationalIdentifier.Contains("+");
@@ -85,7 +85,7 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
             if (nationalIdentifierWhereHyphenAndPlusHasBeenStripped.Length > 10)
                 return int.Parse(nationalIdentifierWhereHyphenAndPlusHasBeenStripped.Substring(0, 4));
 
-            var currentYear = DateTime.Now.Year;
+            var currentYear = SystemTime.Current.Year;
             var currentCentury = currentYear - currentYear % 100;
             var nationalIdentifierYear = int.Parse(nationalIdentifierWhereHyphenAndPlusHasBeenStripped.Substring(0, 2));
             var yearhWithCentury = currentCentury + nationalIdentifierYear;

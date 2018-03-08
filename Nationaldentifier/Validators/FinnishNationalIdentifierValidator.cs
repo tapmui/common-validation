@@ -52,7 +52,7 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
         public override string Normalize(string nationalIdentifier)
         {
             if (!IsValid(nationalIdentifier))
-                throw new ArgumentException(ErrorMessages.GetInvalidIdentifierMessage(NationalCountry), nameof(nationalIdentifier));
+                throw new ArgumentException(ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier, NationalCountry), nameof(nationalIdentifier));
 
             return nationalIdentifier;
         }

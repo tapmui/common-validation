@@ -2,7 +2,7 @@
 {
     public static class ErrorMessages
     {
-        public static string GetInvalidIdentifierMessage(NationalIdentifierCountry nationalCountry) =>
-            $"The given national Identifier is not valid for the country {nationalCountry}";
+        public static string GetInvalidIdentifierMessage(string nationalIdentifier ,NationalIdentifierCountry nationalCountry) =>
+            $"The given national Identifier '{nationalIdentifier}' is not valid for the country {nationalCountry}";
     }
 }

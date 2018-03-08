@@ -16,16 +16,18 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
     public class NorwegianNationalIdentifierValidator : NationalIdentifierValidator
     {
         /// <remarks>Regex has been check with SDL Regex Fuzzer tool so it should not be a source for DOS attacks. IF YOU UPDATE THE REGEX recheck it again with the SDL tool.</remarks>>
-        private static readonly Regex NationalIdentifierWhitelistValidator = new Regex(@"^([0-3]\d[0-1]\d{3}\-?\d{5})$", RegexOptions.ECMAScript);
+        private static readonly Regex NationalIdentifierWhitelistValidator =
+            new Regex(@"^([0-3]\d[0-1]\d{3}\-?\d{5})$", RegexOptions.ECMAScript);
 
         /// <remarks>Regex has been check with SDL Regex Fuzzer tool so it should not be a source for DOS attacks. IF YOU UPDATE THE REGEX recheck it again with the SDL tool.</remarks>>
-        private static readonly Regex TemporaryNationalIdentifierWhitelistValidator = new Regex(@"^([4-7]\d[0-1]\d{3}\-?\d{5})$", RegexOptions.ECMAScript);
+        private static readonly Regex TemporaryNationalIdentifierWhitelistValidator =
+            new Regex(@"^([4-7]\d[0-1]\d{3}\-?\d{5})$", RegexOptions.ECMAScript);
 
         /// <remarks>The two first element are set to zero for padding so index don't need to be adjusted when doing calculations.</remarks>>
-        private static readonly int[] SumOneFactors = { 0, 1, 2, 5, 4, 9, 8, 1, 6, 7, 3 };
+        private static readonly int[] SumOneFactors = {0, 1, 2, 5, 4, 9, 8, 1, 6, 7, 3};
 
         /// <remarks>The first element are set to zero for padding so index don't need to be adjusted when doing calculations.</remarks>>
-        private static readonly int[] SumTwoFactors = { 1, 2, 3, 4, 5, 6, 7, 2, 3, 4, 5 };
+        private static readonly int[] SumTwoFactors = {1, 2, 3, 4, 5, 6, 7, 2, 3, 4, 5};
 
         public override NationalIdentifierCountry NationalCountry => NationalIdentifierCountry.Norway;
 
@@ -62,7 +64,8 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
         public override string Normalize(string nationalIdentifier)
         {
             if (!IsValid(nationalIdentifier))
-                throw new ArgumentException(ErrorMessages.GetInvalidIdentifierMessage(NationalCountry), nameof(nationalIdentifier));
+                throw new ArgumentException(ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier, NationalCountry),
+                    nameof(nationalIdentifier));
 
             return nationalIdentifier.Replace("-", "");
         }

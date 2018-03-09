@@ -30,7 +30,7 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
             {'A', 2000}
         };
 
-        public override NationalIdentifierCountry NationalCountry => NationalIdentifierCountry.Finland;
+        public override NationalIdentifierCountry Country => NationalIdentifierCountry.Finland;
 
         public override bool IsValid(string nationalIdentifier)
         {
@@ -44,7 +44,7 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
             var month = int.Parse(nationalIdentifier.Substring(2, 2));
             var day = int.Parse(nationalIdentifier.Substring(0, 2));
 
-            return NationalIdentifierValidator.IsValidDate(yearhWithCentury, month, day) && HasValidControlDigit(nationalIdentifier);
+            return IsValidDate(yearhWithCentury, month, day) && HasValidControlDigit(nationalIdentifier);
         }
 
         /// <summary>Transforms valid national identifier into format DDMMYYCZZZQ.</summary>
@@ -52,7 +52,7 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
         public override string Normalize(string nationalIdentifier)
         {
             if (!IsValid(nationalIdentifier))
-                throw new ArgumentException(ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier, NationalCountry), nameof(nationalIdentifier));
+                throw new ArgumentException(ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier, Country), nameof(nationalIdentifier));
 
             return nationalIdentifier;
         }

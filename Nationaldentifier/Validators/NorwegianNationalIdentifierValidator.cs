@@ -29,7 +29,7 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
         /// <remarks>The first element are set to zero for padding so index don't need to be adjusted when doing calculations.</remarks>>
         private static readonly int[] SumTwoFactors = {1, 2, 3, 4, 5, 6, 7, 2, 3, 4, 5};
 
-        public override NationalIdentifierCountry NationalCountry => NationalIdentifierCountry.Norway;
+        public override NationalIdentifierCountry Country => NationalIdentifierCountry.Norway;
 
         public override bool IsValid(string nationalIdentifier)
         {
@@ -64,7 +64,7 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
         public override string Normalize(string nationalIdentifier)
         {
             if (!IsValid(nationalIdentifier))
-                throw new ArgumentException(ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier, NationalCountry),
+                throw new ArgumentException(ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier, Country),
                     nameof(nationalIdentifier));
 
             return nationalIdentifier.Replace("-", "");

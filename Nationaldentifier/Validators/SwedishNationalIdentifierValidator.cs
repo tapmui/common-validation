@@ -23,7 +23,7 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
         private static readonly Regex TemporaryNationalIdentifierWhitelistValidator =
             new Regex(@"^((\d{2}|\d{4})\-?[0-1]\d\-?[6-9]\d[\-+]?\d{4})$", RegexOptions.ECMAScript);
 
-        public override NationalIdentifierCountry NationalCountry => NationalIdentifierCountry.Sweden;
+        public override NationalIdentifierCountry Country => NationalIdentifierCountry.Sweden;
 
         public override bool IsValid(string nationalIdentifier)
         {
@@ -62,7 +62,7 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
         {
             if (!IsValid(nationalIdentifier))
                 throw new ArgumentException(
-                    ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier, NationalCountry),
+                    ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier, Country),
                     nameof(nationalIdentifier));
 
             var hasPlusSign = nationalIdentifier.Contains("+");

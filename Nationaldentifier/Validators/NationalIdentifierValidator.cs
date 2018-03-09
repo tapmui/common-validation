@@ -6,35 +6,24 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
 {
     public abstract class NationalIdentifierValidator : INationalIdentifierValidator
     {
-        private static readonly Dictionary<NationalIdentifierCountry, NationalIdentifierValidator> SignMethodToValidatorMapping = new Dictionary<NationalIdentifierCountry, NationalIdentifierValidator>
+        private static readonly Dictionary<NationalIdentifierCountry, NationalIdentifierValidator>
+            SignMethodToValidatorMapping = new Dictionary<NationalIdentifierCountry, NationalIdentifierValidator>
             {
-                { NationalIdentifierCountry.Sweden, new SwedishNationalIdentifierValidator() },
-                { NationalIdentifierCountry.Norway, new NorwegianNationalIdentifierValidator() },
-                { NationalIdentifierCountry.Finland, new FinnishNationalIdentifierValidator() },
-                { NationalIdentifierCountry.Denmark, new DanishNationalIdentifierValidator() }
+                {NationalIdentifierCountry.Sweden, new SwedishNationalIdentifierValidator()},
+                {NationalIdentifierCountry.Norway, new NorwegianNationalIdentifierValidator()},
+                {NationalIdentifierCountry.Finland, new FinnishNationalIdentifierValidator()},
+                {NationalIdentifierCountry.Denmark, new DanishNationalIdentifierValidator()}
             };
+
+        public abstract NationalIdentifierCountry Country { get; }
 
         public static INationalIdentifierValidator GetValidator(NationalIdentifierCountry country)
         {
-            if(SignMethodToValidatorMapping.ContainsKey(country))
+            if (SignMethodToValidatorMapping.ContainsKey(country))
                 return SignMethodToValidatorMapping[country];
-            throw new ArgumentOutOfRangeException(nameof(country), country, "There is no validation implemented for the given country.");
+            throw new ArgumentOutOfRangeException(nameof(country), country,
+                "There is no validation implemented for the given country.");
         }
-
-        public static INationalIdentifierValidator GetValidator(string nationalIdentifier)
-        {
-            foreach (var validator in SignMethodToValidatorMapping)
-            {
-                if (validator.Value.IsValid(nationalIdentifier))
-                {
-                    return SignMethodToValidatorMapping[validator.Value.NationalCountry];
-                }
-            }
-            throw new ArgumentException("National Identifier is not valid");
-        }
-
-        /// <summary>Country code for the country that the instance that implements <see cref="NationalIdentifierValidator"/> applies to as ISO 3166-1 alpha-2.</summary>
-        public abstract NationalIdentifierCountry NationalCountry { get; }
 
         public static bool IsValidInAnyCountry(string nationalIdentifier)
         {
@@ -45,13 +34,8 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
                     return true;
                 }
             }
-            return false;
-        }
 
-        public static bool IsValidInAnyCountry(long nationalIdentifier)
-        {
-            var nationalIdentifierString = nationalIdentifier.ToString();
-            return IsValidInAnyCountry(nationalIdentifierString);
+            return false;
         }
 
         public static string NormalizeForAnyCountry(string nationalIdentifier)
@@ -63,21 +47,17 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
                     return validator.Value.Normalize(nationalIdentifier);
                 }
             }
-            throw new ArgumentException("National Identifier is not valid");
+
+            throw new ArgumentException($"National Identifier '{nationalIdentifier}' is not valid", nameof(nationalIdentifier));
         }
 
         public abstract bool IsValid(string nationalIdentifier);
-
-        public bool IsValid(long nationalIdentifier)
-        {
-            return IsValid(nationalIdentifier.ToString());
-        }
 
         public abstract string Normalize(string nationalIdentifier);
 
         internal static bool IsValidDate(int year, int month, int day)
         {
-            var maxDaysInMonth = new[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+            var maxDaysInMonth = new[] {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
             if (DateTime.IsLeapYear(year))
                 maxDaysInMonth[1] = 29;
 
@@ -86,9 +66,9 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
 
         internal static long GetDigitAtPosition(long input, int position)
         {
-            var divisor = (long)Math.Pow(10, position);
+            var divisor = (long) Math.Pow(10, position);
             var lowestDigitContainsDigitWeWant = input / divisor;
-            return lowestDigitContainsDigitWeWant % 10;  // Take the remainder of 10 to extract the digit we want
+            return lowestDigitContainsDigitWeWant % 10; // Take the remainder of 10 to extract the digit we want
         }
     }
 }

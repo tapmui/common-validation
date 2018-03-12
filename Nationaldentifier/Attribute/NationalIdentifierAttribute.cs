@@ -27,13 +27,14 @@ namespace Collector.Common.Validation.NationalIdentifier.Attribute
                     : new ValidationResult(ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier));
             }
 
-            var validator = NationalIdentifierValidator.GetValidator((CountryCode) _countryCode);
+            var countryCode = (CountryCode) _countryCode;
+            var validator = NationalIdentifierValidator.GetValidator(countryCode);
 
             return validator.IsValid(nationalIdentifier)
                 ? ValidationResult.Success
                 : new ValidationResult(
                     ErrorMessages.GetInvalidIdentifierMessage(
-                        ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier)));
+                        ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier, countryCode)));
         }
     }
 }

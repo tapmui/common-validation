@@ -46,7 +46,7 @@ namespace Collector.Common.Validation.Test.NationalIdentifier
             var ex = Assert.Throws<ArgumentException>(() => _sut.Normalize(nationalIdentifier));
             Assert.That(ex.ParamName, Is.EqualTo("nationalIdentifier"), nameof(ex.ParamName));
             Assert.That(ex.Message,
-                Does.Contain(nationalIdentifier ?? string.Empty).And.Contain(_sut.Country.ToString()),
+                Does.Contain(nationalIdentifier ?? string.Empty).And.Contain(_sut.CountryCode.ToString()),
                 nameof(ex.Message));
         }
 

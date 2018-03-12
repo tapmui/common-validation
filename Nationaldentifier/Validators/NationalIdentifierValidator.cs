@@ -6,22 +6,22 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
 {
     public abstract class NationalIdentifierValidator : INationalIdentifierValidator
     {
-        private static readonly Dictionary<NationalIdentifierCountry, NationalIdentifierValidator>
-            SignMethodToValidatorMapping = new Dictionary<NationalIdentifierCountry, NationalIdentifierValidator>
+        private static readonly Dictionary<CountryCode, NationalIdentifierValidator>
+            SignMethodToValidatorMapping = new Dictionary<CountryCode, NationalIdentifierValidator>
             {
-                {NationalIdentifierCountry.Sweden, new SwedishNationalIdentifierValidator()},
-                {NationalIdentifierCountry.Norway, new NorwegianNationalIdentifierValidator()},
-                {NationalIdentifierCountry.Finland, new FinnishNationalIdentifierValidator()},
-                {NationalIdentifierCountry.Denmark, new DanishNationalIdentifierValidator()}
+                {CountryCode.SE, new SwedishNationalIdentifierValidator()},
+                {CountryCode.NO, new NorwegianNationalIdentifierValidator()},
+                {CountryCode.FI, new FinnishNationalIdentifierValidator()},
+                {CountryCode.DK, new DanishNationalIdentifierValidator()}
             };
 
-        public abstract NationalIdentifierCountry Country { get; }
+        public abstract CountryCode CountryCode { get; }
 
-        public static INationalIdentifierValidator GetValidator(NationalIdentifierCountry country)
+        public static INationalIdentifierValidator GetValidator(CountryCode countryCode)
         {
-            if (SignMethodToValidatorMapping.ContainsKey(country))
-                return SignMethodToValidatorMapping[country];
-            throw new ArgumentOutOfRangeException(nameof(country), country,
+            if (SignMethodToValidatorMapping.ContainsKey(countryCode))
+                return SignMethodToValidatorMapping[countryCode];
+            throw new ArgumentOutOfRangeException(nameof(countryCode), countryCode,
                 "There is no validation implemented for the given country.");
         }
 

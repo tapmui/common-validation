@@ -14,13 +14,13 @@ namespace Collector.Common.Validation.Test.NationalIdentifier
             SystemTime.TestTime = new DateTimeOffset(new DateTime(2010, 01, 01), TimeSpan.Zero);
         }
 
-        [TestCase(NationalIdentifierCountry.Denmark, typeof(DanishNationalIdentifierValidator))]
-        [TestCase(NationalIdentifierCountry.Finland, typeof(FinnishNationalIdentifierValidator))]
-        [TestCase(NationalIdentifierCountry.Norway, typeof(NorwegianNationalIdentifierValidator))]
-        [TestCase(NationalIdentifierCountry.Sweden, typeof(SwedishNationalIdentifierValidator))]
-        public void GetValidator_Country_ReturnsCorrectValidator(NationalIdentifierCountry country, Type type)
+        [TestCase(CountryCode.DK, typeof(DanishNationalIdentifierValidator))]
+        [TestCase(CountryCode.FI, typeof(FinnishNationalIdentifierValidator))]
+        [TestCase(CountryCode.NO, typeof(NorwegianNationalIdentifierValidator))]
+        [TestCase(CountryCode.SE, typeof(SwedishNationalIdentifierValidator))]
+        public void GetValidator_Country_ReturnsCorrectValidator(CountryCode countryCode, Type type)
         {
-            var result = NationalIdentifierValidator.GetValidator(country);
+            var result = NationalIdentifierValidator.GetValidator(countryCode);
             Assert.That(result, Is.AssignableFrom(type));
         }
 

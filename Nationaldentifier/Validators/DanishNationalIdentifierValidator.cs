@@ -23,7 +23,7 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
         private static readonly Regex TemporaryNationalIdentifierWhitelistValidator =
             new Regex(@"^([6-9]\d[0-1]\d{3}\-?\d{4})$", RegexOptions.ECMAScript);
 
-        public override NationalIdentifierCountry Country => NationalIdentifierCountry.Denmark;
+        public override CountryCode CountryCode => CountryCode.DK;
 
         public override bool IsValid(string nationalIdentifier)
         {
@@ -57,7 +57,7 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
         public override string Normalize(string nationalIdentifier)
         {
             if (!IsValid(nationalIdentifier))
-                throw new ArgumentException(ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier, Country),
+                throw new ArgumentException(ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier, CountryCode),
                     nameof(nationalIdentifier));
 
             return nationalIdentifier.Replace("-", "");

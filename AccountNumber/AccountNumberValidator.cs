@@ -3,8 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Collector.Common.Validation.AccountNumber.Models;
+using Newtonsoft.Json;
 
 namespace Collector.Common.Validation.AccountNumber
 {
@@ -22,15 +22,11 @@ namespace Collector.Common.Validation.AccountNumber
         public Task<BankIdentityModel> Identify(string clearingNumber)
         {
             if (clearingNumber == null)
-            {
-                throw new ArgumentNullException("clearingNumber", "Clearing number must have a value");
-            }
+                throw new ArgumentNullException(nameof(clearingNumber), "Clearing number must have a value");
 
             var clearingNumber2 = Regex.Replace(clearingNumber, NO_DIGITS_PATTERN, string.Empty);
             if (string.IsNullOrEmpty(clearingNumber2))
-            {
-                throw new ArgumentException("Clearing number must contain digits", "clearingNumber");
-            }
+                throw new ArgumentException("Clearing number must contain digits", nameof(clearingNumber));
 
             try
             {
@@ -42,21 +38,17 @@ namespace Collector.Common.Validation.AccountNumber
             }
             catch (InvalidOperationException)
             {
-                throw new ArgumentException("Clearing number could not be identified", "clearingNumber");
+                throw new ArgumentException("Clearing number could not be identified", nameof(clearingNumber));
             }
         }
 
         public Task<BankAccountModel> Validate(string clearingNumber, string accountNumber)
         {
             if (clearingNumber == null)
-            {
-                throw new ArgumentNullException("clearingNumber", "Clearing number must have a value");
-            }
+                throw new ArgumentNullException(nameof(clearingNumber), "Clearing number must have a value");
 
             if (accountNumber == null)
-            {
-                throw new ArgumentNullException("accountNumber", "Account number must have a value");
-            }
+                throw new ArgumentNullException(nameof(accountNumber), "Account number must have a value");
 
             // Remove all non-numerical characters in parameters
             var clearingNumber2 = Regex.Replace(clearingNumber, NO_DIGITS_PATTERN, string.Empty);
@@ -64,14 +56,16 @@ namespace Collector.Common.Validation.AccountNumber
 
             // Look up validation config
             var length = clearingNumber2.Length + accountNumber2.Length;
-            var configs = _banks.Where(c => (length <= (c.Clearing + c.Account)) && Regex.IsMatch(clearingNumber2, c.ClearingRegex));
+            var configs = _banks.Where(c =>
+                length <= c.Clearing + c.Account && Regex.IsMatch(clearingNumber2, c.ClearingRegex));
             foreach (var config in configs)
             {
                 // Ensure account number contains specified number of digits
                 if (accountNumber2.Length < config.Account)
                 {
                     var zeroes = config.Account - accountNumber2.Length;
-                    accountNumber2 = String.Join(string.Empty, Enumerable.Repeat("0", zeroes).ToArray()) + accountNumber2;
+                    accountNumber2 = string.Join(string.Empty, Enumerable.Repeat("0", zeroes).ToArray()) +
+                                     accountNumber2;
                 }
 
                 var number = clearingNumber2 + accountNumber2;
@@ -81,17 +75,15 @@ namespace Collector.Common.Validation.AccountNumber
                     var number2 = number.Substring(number.Length - config.Control, config.Control);
 
                     // Validate number according to configuration
-                    if ((config.Modulo == Mod10.ID && Mod10.Validate(number2)) || (config.Modulo == Mod11.ID && Mod11.Validate(number2)))
-                    {
-                        // Return a new bank information model
+                    if (config.Modulo == Mod10.ID && Mod10.Validate(number2) ||
+                        config.Modulo == Mod11.Id && Mod11.Validate(number2))
                         return Task.FromResult(
                             new BankAccountModel(
-                                name: config.Name,
-                                clearingNumber: clearingNumber2,
-                                accountNumber: accountNumber2
+                                config.Name,
+                                clearingNumber2,
+                                accountNumber2
                             )
                         );
-                    }
                 }
             }
 
@@ -100,16 +92,15 @@ namespace Collector.Common.Validation.AccountNumber
 
         public Task<BankAccountModel> Validate(string number)
         {
-            if (number == null)
-            {
-                throw new ArgumentNullException("accountNumber", "Account number must have a value");
-            }
+            if (number == null) throw new ArgumentNullException(nameof(number), "Account number must have a value");
 
             // Remove all non-numerical characters in parameters
             var number2 = Regex.Replace(number, NO_DIGITS_PATTERN, string.Empty);
 
             // Look up validation config based on clearing number Regex pattern
-            var configs = _banks.Where(c => (number2.Length >= c.Clearing) && (number2.Length <= (c.Clearing + c.Account)) && Regex.IsMatch(number2.Substring(0, c.Clearing), c.ClearingRegex));
+            var configs = _banks.Where(c =>
+                number2.Length >= c.Clearing && number2.Length <= c.Clearing + c.Account &&
+                Regex.IsMatch(number2.Substring(0, c.Clearing), c.ClearingRegex));
             foreach (var config in configs)
             {
                 var clearingNumber = number2.Substring(0, config.Clearing);
@@ -119,33 +110,29 @@ namespace Collector.Common.Validation.AccountNumber
                 if (accountNumber.Length < config.Account)
                 {
                     var zeroes = config.Account - accountNumber.Length;
-                    accountNumber = String.Join(string.Empty, Enumerable.Repeat("0", zeroes).ToArray()) + accountNumber;
+                    accountNumber = string.Join(string.Empty, Enumerable.Repeat("0", zeroes).ToArray()) + accountNumber;
                 }
 
                 // Construct complete account number based on config
                 var number3 = clearingNumber + accountNumber;
-                if (!Regex.IsMatch(number3, config.NumberRegex))
-                {
-                    continue;
-                }
+                if (!Regex.IsMatch(number3, config.NumberRegex)) continue;
 
                 // Extract account number control digits based on validation config
                 var controlNumber = number3.Substring(number3.Length - config.Control, config.Control);
 
                 // Validate number according to configuration
-                if ((config.Modulo == Mod10.ID && Mod10.Validate(controlNumber)) || (config.Modulo == Mod11.ID && Mod11.Validate(controlNumber)))
-                {
+                if (config.Modulo == Mod10.ID && Mod10.Validate(controlNumber) ||
+                    config.Modulo == Mod11.Id && Mod11.Validate(controlNumber))
                     return Task.FromResult(
                         new BankAccountModel(
-                            clearingNumber: clearingNumber, 
-                            accountNumber: accountNumber, 
+                            clearingNumber: clearingNumber,
+                            accountNumber: accountNumber,
                             name: config.Name
                         )
                     );
-                }
             }
 
-            throw new ArgumentException("Account number could not be validated", "number");
+            throw new ArgumentException("Account number could not be validated", nameof(number));
         }
 
         public Task<bool> TryIdentify(string clearingNumber, out BankIdentityModel result)

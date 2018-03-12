@@ -1,10 +1,10 @@
-﻿using Collector.Common.Validation.AccountNumber;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Collector.Common.Validation.AccountNumber;
+using NUnit.Framework;
 
-namespace Collector.Common.Validation.Tests.AccountNumber
+namespace Collector.Common.Validation.Test.AccountNumber
 {
     public class ValidationTest
     {
@@ -42,7 +42,8 @@ namespace Collector.Common.Validation.Tests.AccountNumber
         [Theory]
         [TestCase("8123", "1234567", "Swedbank")]
         [TestCase("8123-5", "7654321", "Swedbank")]
-        public void Validate_AccountNumber_And_Expect_Exception(string clearingNumber, string accountNumber, string expectedBankName)
+        public void Validate_AccountNumber_And_Expect_Exception(string clearingNumber, string accountNumber,
+                                                                string expectedBankName)
         {
             Assert.ThrowsAsync<ArgumentException>(() => _sut.Validate(clearingNumber, accountNumber));
         }
@@ -50,7 +51,8 @@ namespace Collector.Common.Validation.Tests.AccountNumber
         [Theory]
         [TestCase("1110", "0000100", "Nordea")]
         [TestCase("3300", "0009100", "Nordea")]
-        public void Validate_AccountNumber_and_Expect_BankName(string clearingNumber, string accountNumber, string expectedBankName)
+        public void Validate_AccountNumber_and_Expect_BankName(string clearingNumber, string accountNumber,
+                                                               string expectedBankName)
         {
             var result = _sut.Validate(clearingNumber, accountNumber).Result;
 
@@ -59,7 +61,7 @@ namespace Collector.Common.Validation.Tests.AccountNumber
 
         [Theory]
         [Explicit]
-        [TestCaseSource("GetNumbers")]
+        [TestCaseSource(nameof(GetNumbers))]
         public void Validate_AccountNumbers_From_Source_Where_Bank_Is_Recognised(string number)
         {
             Assert.DoesNotThrowAsync(() => _sut.Validate(number));
@@ -70,7 +72,7 @@ namespace Collector.Common.Validation.Tests.AccountNumber
             var allRows = File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "numbers.csv"));
             foreach (var line in allRows)
             {
-                yield return new object[] { line };
+                yield return new object[] {line};
             }
         }
     }

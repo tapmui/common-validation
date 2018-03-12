@@ -3,17 +3,17 @@ namespace Collector.Common.Validation.AccountNumber.Models
     public class BankAccountModel
     {
         public BankAccountModel(
-            string name, 
-            string clearingNumber, 
+            string name,
+            string clearingNumber,
             string accountNumber)
         {
-            Name = name;
+            Name           = name;
             ClearingNumber = clearingNumber;
-            AccountNumber = accountNumber;
+            AccountNumber  = accountNumber;
         }
 
-        public string Name { get; }
+        public string Name           { get; }
         public string ClearingNumber { get; }
-        public string AccountNumber { get; }
+        public string AccountNumber  { get; }
     }
 }

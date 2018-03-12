@@ -33,8 +33,7 @@ namespace Collector.Common.Validation.NationalIdentifier.Attribute
             return validator.IsValid(nationalIdentifier)
                 ? ValidationResult.Success
                 : new ValidationResult(
-                    ErrorMessages.GetInvalidIdentifierMessage(
-                        ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier, countryCode)));
+                    ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier, countryCode));
         }
     }
 }

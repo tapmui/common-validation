@@ -7,6 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="numbers.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="numbers.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="..\AccountNumber\banks.se.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.2.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.2.0" />
@@ -16,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AccountNumber\Collector.Common.Validation.AccountNumber.csproj" />
     <ProjectReference Include="..\Nationaldentifier\Collector.Common.Validation.NationalIdentifier.csproj" />
   </ItemGroup>
 

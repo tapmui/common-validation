@@ -48,7 +48,7 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
                 }
             }
 
-            throw new ArgumentException($"National Identifier '{nationalIdentifier}' is not valid", nameof(nationalIdentifier));
+            throw new ArgumentException(ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier), nameof(nationalIdentifier));
         }
 
         public abstract bool IsValid(string nationalIdentifier);

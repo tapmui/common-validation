@@ -78,8 +78,8 @@ namespace Collector.Common.Validation.Test.NationalIdentifier
                     yield return "800520+2216";
                     yield return "320229-4173";   // 1932 has leapyear
                     yield return "19320229-4173"; // 1932 has leapyear
-                    yield return "040222-2269";   // 2004 has leapyear
-                    yield return "20040222-2269"; // 2004 has leapyear
+                    yield return "040229-2262";   // 2004 has leapyear
+                    yield return "20040229-2262"; // 2004 has leapyear
                     yield return "840161-2729";   // Valid temporary number with 01 days
                     yield return "840191-0313";   // Valid temporary number with 31 days
                     yield return "040289-5049";   // Valid temporary number with leapyear
@@ -116,7 +116,7 @@ namespace Collector.Common.Validation.Test.NationalIdentifier
                     yield return new TestCaseData("091230-7808", "200912307808");
                     yield return new TestCaseData("100102-4841", "201001024841");
                     yield return new TestCaseData("100102+4841", "191001024841");
-                    yield return new TestCaseData("040222-2269", "200402222269"); // 2004 has leapyear
+                    yield return new TestCaseData("040229-2262", "200402292262"); // 2004 has leapyear
                     yield return new TestCaseData("840161-2729", "198401612729");
                     // Valid temporary number with 01 days
                 }

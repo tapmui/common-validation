@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Collector.Common.Validation.AccountNumber.Interface;
-using Collector.Common.Validation.AccountNumber;
+using Collector.Common.Validation.AccountNumber.Implementation;
 using NUnit.Framework;
 
 namespace Collector.Common.Validation.Test.AccountNumber

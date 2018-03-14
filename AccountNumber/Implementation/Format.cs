@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Collector.Common.Validation.AccountNumber
+namespace Collector.Common.Validation.AccountNumber.Implementation
 {
     internal static class Format
     {

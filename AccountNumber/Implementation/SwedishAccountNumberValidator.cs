@@ -2,13 +2,12 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Collector.Common.Validation.AccountNumber.Models;
 using Newtonsoft.Json;
 using Collector.Common.Validation.AccountNumber.Interface;
 using Collector.Common.Validation.AccountNumber.Validators;
 
-namespace Collector.Common.Validation.AccountNumber
+namespace Collector.Common.Validation.AccountNumber.Implementation
 {
     public class SwedishAccountNumberValidator : IAccountNumberValidator
     {

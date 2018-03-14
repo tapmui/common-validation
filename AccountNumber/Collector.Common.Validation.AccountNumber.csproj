@@ -4,9 +4,7 @@
     <TargetFrameworks>netstandard1.6;net451</TargetFrameworks>
     <Authors>Magnus Törnvall</Authors>
     <Company>Collector AB</Company>
-    <Description>Tools to identify bank and validate account number.
-
-Based on kontonummer.js by Jonas Persson (https://jop.io/)</Description>
+    <Description>Tools to identify bank and validate account number.</Description>
     <PackageTags>validation, bank, account number</PackageTags>
     <PackageReleaseNotes></PackageReleaseNotes>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>

@@ -5,9 +5,9 @@ namespace Collector.Common.Validation.AccountNumber.Interface
 {
     public interface IAccountNumberValidator
     {
-        Task<BankAccountModel> Identify(string number);
-        Task<bool> TryIdentify(string number, out BankAccountModel result);
-        Task<bool>              TryValidate(string number, out BankAccountModel result);
-        Task<BankAccountModel>  Validate(string number);
+        BankAccountModel  Identify(string number);
+        bool              TryIdentify(string number, out BankAccountModel result);
+        bool              TryValidate(string number, out BankAccountModel result);
+        BankAccountModel  Validate(string number);
     }
 }

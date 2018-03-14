@@ -22,13 +22,11 @@ namespace Collector.Common.Validation.AccountNumber
             _banks = JsonConvert.DeserializeObject<AccountValidationModel[]>(File.ReadAllText(path));
         }
         
-        public Task<BankAccountModel> Identify(string number)
+        public BankAccountModel Identify(string number)
         {
             try
             {
-                var identity = IdentifyInternal(number);
-
-                return Task.FromResult(identity);
+                return IdentifyInternal(number);
             }
             catch (ArgumentException ex)
             {
@@ -40,45 +38,43 @@ namespace Collector.Common.Validation.AccountNumber
             }
         }
 
-        public Task<bool> TryIdentify(string number, out BankAccountModel result)
+        public bool TryIdentify(string number, out BankAccountModel result)
         {
             try
             {
-                result = Identify(number).Result;
+                result = Identify(number);
             }
             catch (ArgumentException)
             {
                 result = null;
 
-                return Task.FromResult(false);
+                return false;
             }
 
-            return Task.FromResult(true);
+            return true;
         }
 
-        public Task<bool> TryValidate(string number, out BankAccountModel result)
+        public bool TryValidate(string number, out BankAccountModel result)
         {
             try
             {
-                result = Validate(number).Result;
+                result = Validate(number);
             }
             catch (ArgumentException)
             {
                 result = null;
 
-                return Task.FromResult(false);
+                return false;
             }
 
-            return Task.FromResult(true);
+            return true;
         }
 
-        public Task<BankAccountModel> Validate(string number)
+        public BankAccountModel Validate(string number)
         {
             try
             {
-                var result = ValidateInternal(number);
-
-                return Task.FromResult(result);
+                return ValidateInternal(number);
             }
             catch (ArgumentException ex)
             {

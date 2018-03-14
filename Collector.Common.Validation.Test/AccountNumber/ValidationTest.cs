@@ -88,7 +88,7 @@ namespace Collector.Common.Validation.Test.AccountNumber
         [TestCase("2300", "Ålandsbanken")]
         public void Identify_Bank_And_Expect_Name(string number, string expectedBankName)
         {
-            var result = _sut.Identify(number).Result;
+            var result = _sut.Identify(number);
 
             Assert.That(result.Name, Is.EqualTo(expectedBankName));
         }
@@ -99,7 +99,7 @@ namespace Collector.Common.Validation.Test.AccountNumber
         public void Validate_AccountNumber_And_Expect_Exception(string number,
                                                                 string expectedBankName)
         {
-            Assert.ThrowsAsync<ArgumentException>(() => _sut.Validate(number));
+            Assert.Throws<ArgumentException>(() => _sut.Validate(number));
         }
 
         [Theory]
@@ -108,7 +108,7 @@ namespace Collector.Common.Validation.Test.AccountNumber
         public void Validate_AccountNumber_and_Expect_BankName(string number,
                                                                string expectedBankName)
         {
-            var result = _sut.Validate(number).Result;
+            var result = _sut.Validate(number);
 
             Assert.That(result.Name, Is.EqualTo(expectedBankName));
         }
@@ -118,7 +118,7 @@ namespace Collector.Common.Validation.Test.AccountNumber
         [TestCaseSource(nameof(GetNumbers))]
         public void Validate_AccountNumbers_From_Source_Where_Bank_Is_Recognised(string number)
         {
-            Assert.DoesNotThrowAsync(() => _sut.Validate(number));
+            Assert.DoesNotThrow(() => _sut.Validate(number));
         }
 
         private static IEnumerable<object> GetNumbers()

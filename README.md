@@ -5,7 +5,6 @@ A collection of string validation tools available as Nuget packages. Currently i
 | Validation subject | Countries | Nuget package name |
 | ------------------ | --------- | ------------------ |
 | National Identifiers (Social Security Numbers) | Denmark, Finland, Norway, Sweden | Collector.Common.Validation.NationalIdentifier |
-| Bank Account Numbers | Sweden | Collector.Common.Validation.AccountNumber
 
 ## Installing
 

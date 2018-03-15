@@ -5,7 +5,6 @@ A collection of string validation tools available as Nuget packages. Currently i
 | Validation subject | Countries | Nuget package name |
 | ------------------ | --------- | ------------------ |
 | National Identifiers (Social Security Numbers) | Denmark, Finland, Norway, Sweden | Collector.Common.Validation.NationalIdentifier |
-| Bank Account Numbers | Sweden | Collector.Common.Validation.AccountNumber
 
 ## Installing
 
@@ -73,4 +72,3 @@ Extensions are very welcome! Get in touch with the Solutions Team and open a pul
 ## Acknowledgments
 
 * Thanks to Said Outgajjouft for the initial work on National Identifiers.
-* Account number validation is based on kontonummer.js by Jonas Persson (https://jop.io/)

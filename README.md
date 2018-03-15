@@ -17,37 +17,6 @@ PM> install-package Collector.Common.Validation.NationalIdentifier
 
 ## Usage
 
-### Account Number
-
-Identify which bank an account number belongs to.
-
-```c#
-var number = "8123-57654321";
-var validator = new SwedishAccountNumberValidator(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "banks.se.json"));
-var result = validator.Identify(number);
-
-// Alternately
-if (validator.TryIdentify(number, out var result2))
-{
-   // success
-}
-```
-
-Validate account number. 
-OBS! Account number validation is a work in progress. It is by no means production ready.
-
-```c#
-var number = "8123-57654321";
-var validator = new SwedishAccountNumberValidator(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "banks.se.json"));
-var result = validator.Validate(number);
-
-// Alternately
-if (validator.TryValidate(number, out var result2))
-{
-   // success
-}
-```
-
 ### National Identifiers
 
 Validate a number for a specific country (returns a bool):

@@ -18,7 +18,7 @@ PM> install-package Collector.Common.Validation.NationalIdentifier
 
 ### National Identifiers
 
-Validate a number for a specific country (returns a bool):
+Validate a number for a specific country using any official format (returns a bool):
 
 ```c#
 var nationalIdentifier = "200301046835";

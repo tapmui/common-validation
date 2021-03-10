@@ -6,12 +6,11 @@
     <Company>Collector Bank AB</Company>
     <Product>National Identifier Validator</Product>
     <Description>Tools to validate and normalise national identifiers (social security numbers) of Denmark, Finland, Norway and Sweden.</Description>
-    <PackageLicenseUrl>https://github.com/collector-bank/common-validation/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicense>https://github.com/collector-bank/common-validation/blob/master/LICENSE</PackageLicense>
     <RepositoryUrl>https://github.com/collector-bank/common-validation</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>validation, normalization, social security number, national identifier, personal number, sweden, denmark, finland, norway</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageIconUrl>https://raw.githubusercontent.com/collector-bank/common-correlation/master/icon.png</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>

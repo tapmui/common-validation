@@ -51,13 +51,18 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
             throw new ArgumentException(ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier), nameof(nationalIdentifier));
         }
 
-        public abstract bool IsValid(string nationalIdentifier);
+		public abstract ParsedNationalIdentifierData Parse(string nationalIdentifier);
+
+		public abstract bool IsValid(string nationalIdentifier);
 
         public abstract string Normalize(string nationalIdentifier);
 
         internal static bool IsValidDate(int year, int month, int day)
         {
             var maxDaysInMonth = new[] {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+			if (year == 0)
+				return false;
+
             if (DateTime.IsLeapYear(year))
                 maxDaysInMonth[1] = 29;
 
@@ -70,5 +75,13 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
             var lowestDigitContainsDigitWeWant = input / divisor;
             return lowestDigitContainsDigitWeWant % 10; // Take the remainder of 10 to extract the digit we want
         }
-    }
+
+		internal static int GetAge(DateTime birthday)
+		{
+			int age = DateTime.Now.Year - birthday.Year;
+			if (DateTime.Now.Month < birthday.Month || DateTime.Now.Month == birthday.Month && DateTime.Now.Day < birthday.Day) age--;
+			return age;
+
+		}
+	}
 }

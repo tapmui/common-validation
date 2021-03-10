@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Collector.Common.Validation.NationalIdentifier;
 using Collector.Common.Validation.NationalIdentifier.Validators;
 using NUnit.Framework;
 
@@ -12,6 +13,7 @@ namespace Collector.Common.Validation.Test.NationalIdentifier
         [SetUp]
         public void SetUp()
         {
+            SystemTime.TestTime = new DateTimeOffset(new DateTime(2010, 01, 01), TimeSpan.Zero);
             _sut = new DanishNationalIdentifierValidator();
         }
 
@@ -19,16 +21,18 @@ namespace Collector.Common.Validation.Test.NationalIdentifier
         public void IsValid_NationalIdentifierIsValid_ReturnTrue(string nationalIdentifier)
         {
             var actual = _sut.IsValid(nationalIdentifier);
-
             Assert.That(actual, Is.True);
+            var parsedResult = _sut.Parse(nationalIdentifier);
+            Assert.That(parsedResult.Valid, Is.True);
         }
 
         [TestCaseSource(typeof(DanishIdentifiers), nameof(DanishIdentifiers.Invalid))]
         public void IsValid_NationalIdentifierIsInvalid_ReturnFalse(string nationalIdentifier)
         {
             var actual = _sut.IsValid(nationalIdentifier);
-
             Assert.That(actual, Is.False);
+            var parsedResult = _sut.Parse(nationalIdentifier);
+            Assert.That(parsedResult.Valid, Is.False);
         }
         
         [TestCaseSource(typeof(DanishIdentifiers), nameof(DanishIdentifiers.Normalized))]
@@ -36,8 +40,8 @@ namespace Collector.Common.Validation.Test.NationalIdentifier
             string nationalIdentifier, string expectedValue)
         {
             var actual = _sut.Normalize(nationalIdentifier);
-
             Assert.That(actual, Is.EqualTo(expectedValue));
+
         }
 
 

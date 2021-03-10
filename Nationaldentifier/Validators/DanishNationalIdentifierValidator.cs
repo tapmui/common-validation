@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Collector.Common.Validation.NationalIdentifier.Interface;
+using System;
 using System.Text.RegularExpressions;
 
 namespace Collector.Common.Validation.NationalIdentifier.Validators
@@ -52,9 +53,47 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
             return IsValidDate(yearhWithCentury, month, day);
         }
 
-        /// <summary>Transforms valid national identifier into format DDMMYYSSSS.</summary>
-        /// <exception cref="ArgumentException">If <paramref name="nationalIdentifier"/> is not valid.</exception>
-        public override string Normalize(string nationalIdentifier)
+		public override ParsedNationalIdentifierData Parse(string nationalIdentifier)
+		{
+			ParsedNationalIdentifierData parsedObj = new ParsedNationalIdentifierData();
+			if (nationalIdentifier == null)
+				return parsedObj;
+
+			var isTemporary = false;
+			if (!NationalIdentifierWhitelistValidator.IsMatch(nationalIdentifier))
+			{
+				if (!TemporaryNationalIdentifierWhitelistValidator.IsMatch(nationalIdentifier))
+					return parsedObj;
+
+				isTemporary = true;
+			}
+
+			var valueToCheck = nationalIdentifier.Replace("-", "");
+			// valueToCheck should contain the following format DDMMYYSSSS
+			var birthYear = int.Parse(valueToCheck.Substring(4, 2));
+			var serialnumber = int.Parse(valueToCheck.Substring(6, 4));
+			var yearhWithCentury = ExtractYearhWithCentury(birthYear, serialnumber);
+			var month = int.Parse(valueToCheck.Substring(2, 2));
+			var day = int.Parse(valueToCheck.Substring(0, 2));
+			if (isTemporary)
+				day -= 60; // 60 is added to the day of temporary numbers so subtract away it
+
+			parsedObj.Valid = IsValidDate(yearhWithCentury, month, day);
+			if (parsedObj.Valid)
+			{
+				//the last digit of the sequence number is odd for males and even for females.
+				parsedObj.Gender = serialnumber % 2 == 1 ? Gender.MALE : Gender.FEMALE;
+				var birthday = new DateTime(yearhWithCentury, month, day);
+                parsedObj.DateOfBirth = birthday;
+                parsedObj.AgeInYears = GetAge(birthday);
+			}
+			
+			return parsedObj;
+		}
+
+		/// <summary>Transforms valid national identifier into format DDMMYYSSSS.</summary>
+		/// <exception cref="ArgumentException">If <paramref name="nationalIdentifier"/> is not valid.</exception>
+		public override string Normalize(string nationalIdentifier)
         {
             if (!IsValid(nationalIdentifier))
                 throw new ArgumentException(ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier, CountryCode),

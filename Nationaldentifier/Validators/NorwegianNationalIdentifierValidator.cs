@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Collector.Common.Validation.NationalIdentifier.Interface;
+using System;
 using System.Text.RegularExpressions;
 
 namespace Collector.Common.Validation.NationalIdentifier.Validators
@@ -60,6 +61,48 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
 
             return IsValidDate(yearhWithCentuary, month, day) && HasValidControlDigits(valueToCheck);
         }
+
+		public override ParsedNationalIdentifierData Parse(string nationalIdentifier)
+		{
+			ParsedNationalIdentifierData parsedObj = new ParsedNationalIdentifierData();
+			if (nationalIdentifier == null)
+				return parsedObj;
+
+			var isTemporary = false;
+			if (!NationalIdentifierWhitelistValidator.IsMatch(nationalIdentifier))
+			{
+				if (!TemporaryNationalIdentifierWhitelistValidator.IsMatch(nationalIdentifier))
+					return parsedObj;
+
+				isTemporary = true;
+			}
+
+			// valueToCheck should have format: DDMMYYZZZQQ
+			var valueToCheck = nationalIdentifier.Replace("-", string.Empty);
+			var year = int.Parse(valueToCheck.Substring(4, 2));
+			var serialNumber = int.Parse(valueToCheck.Substring(6, 3));
+			var yearhWithCentury = ExtractYearhWithCentury(year, serialNumber);
+			if (yearhWithCentury < 0)
+				return parsedObj;
+
+			var month = int.Parse(valueToCheck.Substring(2, 2));
+			var day = int.Parse(valueToCheck.Substring(0, 2));
+			if (isTemporary)
+				day -= 40; // 40 is added to the day of temporary numbers so subtract away it
+
+			parsedObj.Valid = IsValidDate(yearhWithCentury, month, day) && HasValidControlDigits(valueToCheck);
+			if (parsedObj.Valid)
+			{
+				//the last digit of the sequence number is odd for males and even for females.
+				parsedObj.Gender = serialNumber % 2 == 1 ? Gender.MALE : Gender.FEMALE;
+
+				var birthday = new DateTime(yearhWithCentury, month, day);
+				parsedObj.DateOfBirth = birthday;
+				parsedObj.AgeInYears = GetAge(birthday);
+			}
+			
+			return parsedObj;
+		}
 
         public override string Normalize(string nationalIdentifier)
         {

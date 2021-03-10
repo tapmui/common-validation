@@ -5,6 +5,7 @@
         SE,
         NO,
         FI,
-        DK
+        DK,
+		DE
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Collector.Common.Validation.NationalIdentifier.Interface;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -35,26 +36,59 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
         public override bool IsValid(string nationalIdentifier)
         {
             if (nationalIdentifier == null || !NationalIdentifierWhitelistValidator.IsMatch(nationalIdentifier))
-                return false;
+			{
+				return false;
+			}
 
-            // nationalIdentifier should contain the following format DDMMYYCZZZQ since it passed the Regex validation
-            var birthYear = int.Parse(nationalIdentifier.Substring(4, 2));
+			// nationalIdentifier should contain the following format DDMMYYCZZZQ since it passed the Regex validation
+			var birthYear = int.Parse(nationalIdentifier.Substring(4, 2));
             var centuarySign = nationalIdentifier.Substring(6, 1)[0];
             var yearhWithCentury = ExtractYearhWithCentury(birthYear, centuarySign);
             var month = int.Parse(nationalIdentifier.Substring(2, 2));
             var day = int.Parse(nationalIdentifier.Substring(0, 2));
 
-            return IsValidDate(yearhWithCentury, month, day) && HasValidControlDigit(nationalIdentifier);
+			return IsValidDate(yearhWithCentury, month, day) && HasValidControlDigit(nationalIdentifier);
         }
 
-        /// <summary>Transforms valid national identifier into format DDMMYYCZZZQ.</summary>
-        /// <exception cref="ArgumentException">If <paramref name="nationalIdentifier"/> is not valid.</exception>
-        public override string Normalize(string nationalIdentifier)
+		public override ParsedNationalIdentifierData Parse(string nationalIdentifier)
+		{
+			ParsedNationalIdentifierData parsedObj = new ParsedNationalIdentifierData();
+			if (nationalIdentifier == null || !NationalIdentifierWhitelistValidator.IsMatch(nationalIdentifier))
+			{
+				return parsedObj;
+			}
+
+			// nationalIdentifier should contain the following format DDMMYYCZZZQ since it passed the Regex validation
+			var birthYear = int.Parse(nationalIdentifier.Substring(4, 2));
+			var centuarySign = nationalIdentifier.Substring(6, 1)[0];
+			var yearhWithCentury = ExtractYearhWithCentury(birthYear, centuarySign);
+			var month = int.Parse(nationalIdentifier.Substring(2, 2));
+			var day = int.Parse(nationalIdentifier.Substring(0, 2));
+			
+			parsedObj.Valid = IsValidDate(yearhWithCentury, month, day) && HasValidControlDigit(nationalIdentifier);
+			if (parsedObj.Valid)
+			{
+				var rollingId = nationalIdentifier.Substring(7, 3);
+				parsedObj.Gender = int.Parse(rollingId) % 2 == 1 ? Gender.MALE : Gender.FEMALE;
+				var birthday = new DateTime(yearhWithCentury, month, day);
+                parsedObj.DateOfBirth = birthday;
+				parsedObj.AgeInYears = GetAge(birthday);
+			}
+
+			
+			return parsedObj;
+		}
+
+		/// <summary>Transforms valid national identifier into format DDMMYYCZZZQ.</summary>
+		/// <exception cref="ArgumentException">If <paramref name="nationalIdentifier"/> is not valid.</exception>
+		public override string Normalize(string nationalIdentifier)
         {
             if (!IsValid(nationalIdentifier))
-                throw new ArgumentException(ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier, CountryCode), nameof(nationalIdentifier));
+			{
+				throw new ArgumentException(ErrorMessages.GetInvalidIdentifierMessage(nationalIdentifier, CountryCode), nameof(nationalIdentifier));
+			}
 
-            return nationalIdentifier;
+			return nationalIdentifier;
         }
 
         private static int ExtractYearhWithCentury(int birthYear, char centuarySign)
@@ -76,5 +110,6 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
             var controlSign = valueToCheck[10];
             return calculatedControlSign == controlSign;
         }
+		
     }
 }

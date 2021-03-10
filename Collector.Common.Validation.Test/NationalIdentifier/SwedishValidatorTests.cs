@@ -24,8 +24,9 @@ namespace Collector.Common.Validation.Test.NationalIdentifier
             SystemTime.TestTime = _defaultTestTime;
 
             var actual = _sut.IsValid(nationalIdentifier);
-
             Assert.That(actual, Is.True);
+            var parsedResult = _sut.Parse(nationalIdentifier);
+            Assert.That(parsedResult.Valid, Is.True);
         }
 
         [TestCaseSource(typeof(SwedishIdentifiers), nameof(SwedishIdentifiers.Invalid))]
@@ -34,8 +35,9 @@ namespace Collector.Common.Validation.Test.NationalIdentifier
             SystemTime.TestTime = _defaultTestTime;
 
             var actual = _sut.IsValid(nationalIdentifier);
-
             Assert.That(actual, Is.False);
+            var parsedResult = _sut.Parse(nationalIdentifier);
+            Assert.That(parsedResult.Valid, Is.False);
         }
         
         [TestCaseSource(typeof(SwedishIdentifiers), nameof(SwedishIdentifiers.Normalized))]

@@ -4,7 +4,11 @@ A collection of string validation tools available as Nuget packages. Currently i
 
 | Validation subject | Countries | Nuget package name |
 | ------------------ | --------- | ------------------ |
-| National Identifiers (Social Security Numbers) | Denmark, Finland, Norway, Sweden | Collector.Common.Validation.NationalIdentifier |
+| National Identifiers (Social Security Numbers) | Denmark, Finland, Norway, Sweden, Germany | Collector.Common.Validation.NationalIdentifier |
+
+Please note that Germany does not have similar personal identifier. Thus the library validates the date format taken from
+personal identification card only. Format must be exactly the same as in the cards: DD.MM.YYYY
+where DD = day, MM = month, YYYY = year
 
 ## Installing
 

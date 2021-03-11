@@ -6,7 +6,7 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
 {
     /// <remarks>
     /// Allowed formats: DD.MM.YYYY
-    ///    where DD = day, MM = month, YY = year
+    ///    where DD = day, MM = month, YYYY = year
     /// </remarks>
     public class GermanyNationalBirthdayIdentifierValidator : NationalIdentifierValidator
     {

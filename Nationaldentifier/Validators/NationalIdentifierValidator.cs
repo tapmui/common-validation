@@ -12,7 +12,8 @@ namespace Collector.Common.Validation.NationalIdentifier.Validators
                 {CountryCode.SE, new SwedishNationalIdentifierValidator()},
                 {CountryCode.NO, new NorwegianNationalIdentifierValidator()},
                 {CountryCode.FI, new FinnishNationalIdentifierValidator()},
-                {CountryCode.DK, new DanishNationalIdentifierValidator()}
+                {CountryCode.DK, new DanishNationalIdentifierValidator()},
+                {CountryCode.DE, new GermanyNationalBirthdayIdentifierValidator()}
             };
 
         public abstract CountryCode CountryCode { get; }
